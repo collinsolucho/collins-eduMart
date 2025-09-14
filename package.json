@@ -10,9 +10,13 @@
   "dependencies": {
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
+    "bcrypt": "^6.0.0",
     "isbot": "^5.1.27",
+    "lucide-react": "^0.539.0",
+    "mongodb": "^6.19.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.6.0",
     "react-router": "^7.7.1"
   },
   "devDependencies": {
