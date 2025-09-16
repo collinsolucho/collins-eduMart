@@ -8,7 +8,7 @@ export default [
   route("products", "routes/products.jsx"),
   route("signup", "routes/signup.jsx"),
   route("login", "routes/login.jsx"),
-  route("categories", "routes/categories.jsx"),
+
   route("aboutus", "routes/aboutus.jsx"),
   route("cart", "routes/cart.jsx"),
   route("profile", "routes/profile/profile.jsx"),
@@ -16,7 +16,6 @@ export default [
   route("products/:id", "routes/productid.jsx"),
   route("products/:id/edit", "routes/admin/edit.jsx"),
   route("checkout", "routes/orders/checkout.jsx"),
-  // route("orders/confirmation", "routes/orders/confirmation.jsx"),
   route("logout", "routes/logout.jsx"),
   route("profile/:id/edit", "routes/profile/editprofile.jsx"),
   route("admin", "routes/admin/admin.jsx"),

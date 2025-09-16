@@ -11,7 +11,6 @@ import {
   getOrdersStats,
   getProductCount,
   getUserCount,
-  getUserById,
   getMessageCount,
   countNewSubscribes,
 } from "../../model/database";

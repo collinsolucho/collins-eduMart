@@ -1,7 +1,6 @@
 import { redirect } from "react-router";
 import { getSession } from "../../.server/session.js";
 import { getOrderById } from "../../model/database";
-import OrderDetails from "./order";
 
 export async function loader({ params, request }) {
   let { orderid, itemid } = params; //params should be named as from the route

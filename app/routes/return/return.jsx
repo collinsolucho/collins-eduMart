@@ -119,7 +119,10 @@ export default function ReturnPolicy() {
                 support@collinsedumart.co.ke
               </a>
               <br />
-              <Phone /> +254 743709582 (WhatsApp available)
+              <Phone />{" "}
+              <a href="tel:+254 743709582">
+                +254 743709582 (WhatsApp available)
+              </a>
             </p>
           </li>
         </ol>
