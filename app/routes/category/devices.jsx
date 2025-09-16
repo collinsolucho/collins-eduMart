@@ -27,7 +27,18 @@ export async function action({ request }) {
   if (!session.get("userId")) {
     return redirect("/login");
   }
+  let formData = await request.formData();
+  let id = formData.get("id");
+  let cartItem = { id, quantity: 1 };
 
+  let cartItems = session.get("cartItems") || [];
+  let matchedItem = cartItems.find((item) => item.id === id);
+  if (matchedItem) {
+    return data({ ok: false, message: "item already in cart" });
+  } else {
+    cartItems.push(cartItem);
+  }
+  session.set("cartItems", cartItems);
   return data(
     { ok: true },
     {

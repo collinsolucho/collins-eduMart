@@ -269,10 +269,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/return-policy"
-                className="text-indigo-600 hover:underline"
-              >
+              <Link to="/return" className="text-indigo-600 hover:underline">
                 Return Policy
               </Link>
             </li>
