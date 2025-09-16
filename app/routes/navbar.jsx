@@ -108,67 +108,51 @@ export default function Navbar({ userId, userRole, cartItems }) {
                   )}
                 </Link>
               </li>
+
               <li>
-                <button
-                  onClick={() => setShowCategories(!showCategories)}
-                  className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
-                >
-                  Categories
-                </button>
+                {/* categories */}
                 <div className="hidden md:flex relative" ref={popoverRef}>
                   <button
                     onClick={() => setShowCategories(!showCategories)}
                     className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
                   >
-                    <User className="w-6 h-6 text-gray-700 dark:text-gray-200" />
+                    Categories
                   </button>
 
-                  {showPopover && (
+                  {showCategories && (
                     <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 z-50">
-                      {!userId && (
-                        <>
-                          <Link
-                            to="/login"
-                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          ></Link>
-                          <Link
-                            to="/signup"
-                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          >
-                            Sign Up
-                          </Link>
-                        </>
-                      )}
-                      {userId && userRole !== "admin" && (
-                        <>
-                          <Link
-                            to="/profile"
-                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          >
-                            Profile
-                          </Link>
-                          <Form method="post" action="/logout">
-                            <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              Logout
-                            </button>
-                          </Form>
-                        </>
-                      )}
-                      {userId && userRole === "admin" && (
-                        <>
-                          <Link
-                            to="/"
-                            className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                          >
-                            Home
-                          </Link>
-                          <Form method="post" action="/logout">
-                            <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              Logout
-                            </button>
-                          </Form>
-                        </>
-                      )}
+                      <>
+                        <Link
+                          to="/textbooks"
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Textbooks
+                        </Link>
+                        <Link
+                          to="/devices"
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Digital Devices
+                        </Link>
+                        <Link
+                          to="/stationery"
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Stationery
+                        </Link>
+                        <Link
+                          to="/exercise"
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Exercise Books
+                        </Link>
+                        <Link
+                          to="/others"
+                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          Others
+                        </Link>
+                      </>
                     </div>
                   )}
                 </div>
