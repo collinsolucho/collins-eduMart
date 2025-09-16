@@ -9,7 +9,7 @@ let subscribes = db.collection("subscribes");
 let message = db.collection("message");
 
 export async function getItem() {
-  const items = await collection.find().toArray();
+  let items = await collection.find().toArray();
 
   return items.map((item) => ({
     ...item,
@@ -22,6 +22,18 @@ export async function addItem(item) {
     ...item,
     createdAt: new Date(),
   });
+}
+
+export async function findDevices() {
+  let devices = await db
+    .collection("commerce")
+    .find({ category: "digital devices" })
+    .toArray();
+
+  return devices.map((item) => ({
+    ...item,
+    _id: item._id.toString(),
+  }));
 }
 
 export async function removeItem(id) {
@@ -40,7 +52,7 @@ export async function getProductCount() {
   let count = await db.collection("commerce").countDocuments();
   return count;
 }
-// ------------------ Users ------------------
+
 export async function addPerson(item) {
   const newPerson = {
     ...item,

@@ -2,7 +2,7 @@ import { index, route } from "@react-router/dev/routes";
 
 export default [
   index("routes/home.jsx"),
-  // route("cart/:id", "routes/cart.jsx"),
+
   route("contactus", "routes/contactus.jsx"),
 
   route("products", "routes/products.jsx"),
@@ -25,5 +25,6 @@ export default [
   route("items", "routes/admin/items.jsx"),
   route("messages", "routes/admin/messages.jsx"),
   route("subscribes", "routes/admin/subscribers.jsx"),
+  route("devices", "routes/category/devices.jsx"),
   route("profile/:orderid/item/:itemid", "routes/profile/orderdetails.jsx"),
 ];

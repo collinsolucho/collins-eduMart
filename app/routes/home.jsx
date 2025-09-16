@@ -256,10 +256,7 @@ export default function Home() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/learning-devices"
-                className="text-indigo-600 hover:underline"
-              >
+              <Link to="/devices" className="text-indigo-600 hover:underline">
                 Digital Learning Devices
               </Link>
             </li>
