@@ -24,65 +24,6 @@ export async function addItem(item) {
   });
 }
 
-// export async function findDevices() {
-//   let devices = await db
-//     .collection("commerce")
-//     .find({ category: "digital devices" })
-//     .toArray();
-
-//   return devices.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
-// }
-
-// export async function findTextbooks() {
-//   let devices = await db
-//     .collection("commerce")
-//     .find({ category: "textbooks" })
-//     .toArray();
-
-//   return devices.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
-// }
-
-// export async function findStationeries() {
-//   let devices = await db
-//     .collection("commerce")
-//     .find({ category: "stationery" })
-//     .toArray();
-
-//   return devices.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
-// }
-// export async function findBooks() {
-//   let devices = await db
-//     .collection("commerce")
-//     .find({ category: "exercise books" })
-//     .toArray();
-
-//   return devices.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
-// }
-
-// export async function findOther() {
-//   let devices = await db
-//     .collection("commerce")
-//     .find({ category: "other" })
-//     .toArray();
-
-//   return devices.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
-// }
-
 export async function removeItem(id) {
   return collection.deleteOne({ _id: new ObjectId(id) });
 }
@@ -326,6 +267,18 @@ export async function getMessageCount() {
   let count = await db.collection("message").countDocuments();
   return count;
 }
+
+export async function updateSubscriberRead(id) {
+  return subscribes.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { read: true } }
+  );
+}
+
+export async function getUnreadMessages() {
+  return message.find({ read: false }).sort({ createdAt: -1 }).toArray();
+}
+
 export async function getNewSubscribers() {
   let sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -350,17 +303,4 @@ export async function updateSubscriberRead(id) {
 
 export async function updateMessageRead(id) {
   return message.updateOne({ _id: new ObjectId(id) }, { $set: { read: true } });
-}
-
-export async function getUnreadSubscribers() {
-  let sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-  return await subscribes
-    .find({ read: false, createdAt: { $gte: sevenDaysAgo } })
-    .toArray();
-}
-
-export async function getUnreadMessages() {
-  return message.find({ read: false }).sort({ createdAt: -1 }).toArray();
 }

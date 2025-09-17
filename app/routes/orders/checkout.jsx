@@ -83,7 +83,7 @@ let formatCurrency = (num) =>
 
 export default function Checkout({ loaderData }) {
   let { cartProducts, subtotal, deliveryFee, total, user } = loaderData;
-  console.log(total, deliveryFee, user);
+
   let navigation = useNavigation();
 
   return (

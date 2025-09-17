@@ -1,79 +1,87 @@
-import { data, redirect } from "react-router";
-import { getAllMessages, getUserById } from "../../model/database";
-import { commitSession, getSession } from "../../.server/session";
+import { data, Form, redirect, useLoaderData } from "react-router";
+import { getAllMessages, updateMessageRead } from "../../model/database";
 
-export async function loader({ request }) {
-  let session = await getSession(request.headers.get("Cookie"));
-  let userId = session.get("userId");
-
-  if (!userId) {
-    return redirect("/login");
-  }
-
-  let user = await getUserById(userId);
-
-  if (!user || user.role !== "admin") {
-    return redirect("/");
-  }
-
+export async function loader() {
   let messages = await getAllMessages();
-
-  return data(
-    { messages },
-    {
-      headers: {
-        "set-cookie": await commitSession(session),
-      },
-    }
-  );
+  let items = messages.map((item) => {
+    return {
+      ...item,
+      _id: item._id.toString(),
+    };
+  });
+  return data({ messages: items });
 }
 
-export default function Messages({ loaderData }) {
-  let { messages } = loaderData;
+export async function action({ request }) {
+  let formData = await request.formData();
+  let _action = formData.get("_action");
+
+  if (_action === "mark-read") {
+    let id = formData.get("id");
+    await updateMessageRead(id);
+    return redirect("/messages");
+  }
+
+  return null;
+}
+
+export default function Messages() {
+  let { messages } = useLoaderData();
 
   return (
-    <main className="min-h-screen bg-gradient-to-tr from-blue-500 via-blue-600 to-blue-800 w-full p-6 flex items-center justify-center">
-      <div className="max-w-4xl w-full bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-8">
-        {/* Header */}
-        <h1 className="text-3xl md:text-4xl font-extrabold text-blue-800 text-center mb-8 tracking-tight">
-          💬 Messages Dashboard
+    <main className="min-h-screen bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          📩 Messages
         </h1>
 
-        {messages.length === 0 ? (
-          <p className="text-gray-600 text-center text-lg">
-            No messages found.
-          </p>
-        ) : (
-          <div className="space-y-6">
-            {messages.map((message) => (
-              <div
-                key={message._id}
-                className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 p-5 rounded-xl shadow-md hover:shadow-lg transition"
-              >
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-semibold text-blue-700">
-                    {message.name}
-                  </h3>
-                  <span className="text-xs text-blue-600 italic">
-                    {new Date(message.createdAt).toLocaleString()}
+        {/* Messages list */}
+        <div className="space-y-4">
+          {messages.map((message) => (
+            <div
+              key={message._id}
+              className="p-4 sm:p-5 bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex justify-between items-start">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  {message.name}
+                </h3>
+                {message.read ? (
+                  <span className="text-green-600 dark:text-green-400 text-sm font-medium flex items-center gap-1">
+                    ✅ Read
                   </span>
-                </div>
-
-                <p className="text-gray-800 mb-1">
-                  <strong>Email:</strong> {message.email}
-                </p>
-                {message.tel && (
-                  <p className="text-gray-800 mb-1">
-                    <strong>Phone:</strong> {message.tel}
-                  </p>
+                ) : (
+                  <span className="text-blue-600 dark:text-blue-400 text-sm font-medium flex items-center gap-1">
+                    ✉️ Unread
+                  </span>
                 )}
-                <p className="text-gray-800">
-                  <strong>Message:</strong> {message.message}
-                </p>
               </div>
-            ))}
-          </div>
-        )}
+
+              <p className="mt-2 text-gray-700 dark:text-gray-300">
+                {message.message}
+              </p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                📧 {message.email}
+              </p>
+              <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                📞 {message.tel}
+              </p>
+
+              {!message.read && (
+                <Form method="post" className="mt-3">
+                  <input type="hidden" name="_action" value="mark-read" />
+                  <input type="hidden" name="id" value={message._id} />
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+                  >
+                    Mark as Read
+                  </button>
+                </Form>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </main>
   );
