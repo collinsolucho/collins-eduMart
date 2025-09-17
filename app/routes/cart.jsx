@@ -7,11 +7,6 @@ import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 export async function loader({ request }) {
   let session = await getSession(request.headers.get("Cookie"));
 
-  // Check if user is logged in
-  if (!session.get("userId")) {
-    return redirect("/login");
-  }
-
   let cartItems = session.get("cartItems") || [];
   let results = await getItem(); //fetch items from database done on every route
   let items = results.map((item) => {
@@ -37,15 +32,17 @@ export async function loader({ request }) {
     })
     .filter(Boolean);
 
-  return { cartProducts, items };
+  return data({
+    cartProducts,
+    items,
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
 }
 
 export async function action({ request }) {
   let session = await getSession(request.headers.get("Cookie"));
-
-  if (!session.get("userId")) {
-    return redirect("/login");
-  }
 
   let formData = await request.formData();
 
@@ -59,7 +56,6 @@ export async function action({ request }) {
       let quantity = formData.get("quantity");
 
       if (Number(quantity) <= 0) {
-        // Remove item from cart if quantity is 0 or negative
         let index = cartItems.findIndex((item) => item.id === id);
         if (index !== -1) {
           cartItems.splice(index, 1);
@@ -73,20 +69,16 @@ export async function action({ request }) {
             },
           }
         );
-      } // prevents negative values & 0
+      }
 
-      // Get the element from cartItems that matches the id
       let matchedItem = cartItems.find((item) => item.id === id);
-      // console.log({ matchedItem });
 
       if (matchedItem) {
-        // Update the element's quantity
         matchedItem.quantity = Number(quantity);
 
         let matchedItemIndex = cartItems.findIndex((item) => item.id === id); //Replaces the old item with the updated one using .splice().
 
         cartItems.splice(matchedItemIndex, 1, matchedItem);
-        //start at matcheditem,remove 1,insert new
       }
 
       session.set("cartItems", cartItems);

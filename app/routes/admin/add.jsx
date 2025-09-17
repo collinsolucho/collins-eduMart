@@ -52,7 +52,7 @@ export async function action({ request }) {
     setErrorMessage(session, "Failed to add item. Please try again.");
   }
 
-  return redirect("/products", {
+  return redirect("/items", {
     headers: {
       "set-cookie": await commitSession(session),
     },

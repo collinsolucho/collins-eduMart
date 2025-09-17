@@ -1,74 +1,67 @@
 import { Form, Link, useActionData } from "react-router";
 
-export function Featured({ img, price, title, grade, id }) {
-  return (
-    <div className="w-full bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      <Link to={`/products/${id}`} className="block">
-        <img
-          src={img}
-          alt={`Cover of ${title}`}
-          className="w-full h-48 object-cover"
-          loading="lazy"
-        />
-        <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-1">{title}</h3>
-          <p className="text-sm text-gray-600 mb-2">Grade: {grade}</p>
-          <p className="text-indigo-600 font-bold text-lg">{price}</p>
-        </div>
-      </Link>
-    </div>
-  );
-}
+// export function Featured({ img, price, title, grade, itemId }) {
+//   return (
+//     <div className="w-full bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+//       <Link to={`/products/${itemId}`} className="block">
+//         <img
+//           src={img}
+//           alt={`Cover of ${title}`}
+//           className="w-full h-48 object-cover"
+//           loading="lazy"
+//         />
+//         <div className="p-4">
+//           <h3 className="text-lg font-semibold text-gray-800 mb-1">{title}</h3>
+//           <p className="text-sm text-gray-600 mb-2">Grade: {grade}</p>
+//           <p className="text-indigo-600 font-bold text-lg">{price}</p>
+//         </div>
+//       </Link>
+//     </div>
+//   );
+// }
 
-export function Card({
-  id,
-  description,
-  price,
-  reviews = 0,
-  title,
-  image,
-  onAdd,
-}) {
+export function Card({ id, title, category, price, image }) {
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300 flex flex-col">
-      {/* Clickable part to go to product detail */}
-      <Link to={`/product/${id}`}>
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-48 object-cover rounded-t-2xl"
-        />
-      </Link>
-
-      <div className="p-4 flex flex-col flex-grow justify-between">
-        {/* Title and description */}
-        <Link to={`/product/${id}`}>
-          <h2 className="text-xl font-semibold text-gray-800 mb-2 hover:underline">
-            {title}
-          </h2>
+    <article className="group relative flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full">
+      {/* Image Container */}
+      <div className="relative h-48 overflow-hidden">
+        <Link to={`/products/${id}`} className="block w-full h-full">
+          <img
+            src={image}
+            alt={`Product image for ${title}`}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
+          />
         </Link>
+      </div>
 
-        <p className="text-gray-600 text-sm mb-3">{description}</p>
-
-        {/* Price + reviews + button */}
-        <div>
-          <p className="text-indigo-600 font-bold text-lg mb-1">KES {price}</p>
-
-          {/* Reviews */}
-          {reviews > 0 ? (
-            <p className="text-sm text-gray-500">{reviews} reviews</p>
-          ) : (
-            <p className="text-sm text-gray-400">No reviews yet</p>
-          )}
+      {/* Content Container */}
+      <div className="p-5 flex flex-col flex-grow">
+        {category && (
+          <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-1">
+            {category}
+          </p>
+        )}
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight flex-grow">
+          <Link to={`/products/${id}`} className="hover:underline">
+            {title}
+          </Link>
+        </h2>
+        <div className="flex justify-between items-center mt-4">
+          <p className="text-xl font-bold text-gray-800 dark:text-gray-100">
+            ksh {price}
+          </p>
           <Form method="post">
             <input type="hidden" name="id" value={id} />
-            <button className="bg-orange-500 hover:bg-orange-700 active:scale-[.97] transition ease-in-out px-6 py-3 rounded-xl absolute -bottom-6 left-1/2 -translate-x-1/2">
-              + Add to cart
+            <button
+              type="submit"
+              className="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold text-sm rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors duration-200"
+            >
+              + Add to Cart
             </button>
           </Form>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
 

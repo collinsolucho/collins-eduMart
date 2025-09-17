@@ -8,6 +8,11 @@ import {
 
 export async function loader({ request }) {
   let session = await getSession(request.headers.get("Cookie"));
+  if (userId) {
+    setSuccessMessage(session, "Logout successful!");
+  } else {
+    setErrorMessage(session, "Failed to logout. Please try again.");
+  }
   return redirect("/", {
     headers: {
       "Set-Cookie": await destroySession(session),

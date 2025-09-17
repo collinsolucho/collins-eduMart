@@ -1,6 +1,7 @@
 import { data, Form, Link } from "react-router";
 import { commitSession, getSession } from "../.server/session";
 import { getItem } from "../model/database";
+import { Card } from "../components/featured";
 
 //data from db
 export async function loader({ request }) {
@@ -84,13 +85,13 @@ export default function List({ loaderData }) {
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {items.map((item) => (
               <li key={item._id}>
-                <Products
-                  itemId={item._id}
-                  name={item.name}
-                  category={item.category}
-                  price={item.price}
-                  imageurl={item.imageurl}
+                <Card
                   id={item._id}
+                  title={item.name}
+                  description={item.category}
+                  price={item.price}
+                  image={item.imageurl}
+                  reviews={0}
                 />
               </li>
             ))}
@@ -98,56 +99,5 @@ export default function List({ loaderData }) {
         )}
       </div>
     </main>
-  );
-}
-
-function Products({ name, category, price, imageurl, id, itemId }) {
-  return (
-    <article className="group relative flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full">
-      {/* Image Container */}
-      <div className="relative h-48 overflow-hidden">
-        <Link
-          key={itemId}
-          to={`/products/${itemId}`}
-          className="block w-full h-full"
-        >
-          <img
-            src={imageurl}
-            alt={`Product image for ${name}`}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-in-out"
-          />
-        </Link>
-      </div>
-
-      {/* Content Container */}
-      <div className="p-5 flex flex-col flex-grow">
-        <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-1">
-          {category}
-        </p>
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight flex-grow">
-          <Link
-            key={itemId}
-            to={`/products/${itemId}`}
-            className="hover:underline"
-          >
-            {name}
-          </Link>
-        </h2>
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-xl font-bold text-gray-800 dark:text-gray-100">
-            ksh {price}
-          </p>
-          <Form method="post">
-            <input type="hidden" name="id" value={id} />
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold text-sm rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition-colors duration-200"
-            >
-              + Add to Cart
-            </button>
-          </Form>
-        </div>
-      </div>
-    </article>
   );
 }

@@ -8,7 +8,7 @@ export function meta() {
   ];
 }
 import { data, Form, Link, redirect, useLoaderData } from "react-router";
-import { Featured } from "../components/featured";
+import { Card } from "../components/featured";
 import {
   commitSession,
   getSession,
@@ -31,7 +31,30 @@ export async function action({ request }) {
   let session = await getSession(request.headers.get("cookie"));
   let formData = await request.formData();
   let email = formData.get("email");
+  let id = formData.get("id");
 
+  if (id) {
+    // Handle add to cart
+    let cartItem = { id, quantity: 1 };
+    let cartItems = session.get("cartItems") || [];
+    let matchedItem = cartItems.find((item) => item.id === id);
+    if (matchedItem) {
+      return data({ ok: false, message: "item already in cart" });
+    } else {
+      cartItems.push(cartItem);
+    }
+    session.set("cartItems", cartItems);
+    return data(
+      { ok: true },
+      {
+        headers: {
+          "set-cookie": await commitSession(session),
+        },
+      }
+    );
+  }
+
+  // Handle newsletter
   let fieldErrors = {
     email: validateText(email.trim()),
   };
@@ -98,13 +121,14 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {featuredItems.map((product) => (
-            <Featured
-              itemId={product._id}
+            <Card
+              id={product._id}
               key={product._id}
-              grade={product.category || "All Grades"}
               title={product.name}
-              price={`Ksh ${product.price}`}
-              img={product.imageurl || "/home/default.jpg"}
+              description=""
+              price={product.price}
+              image={product.imageurl || "/home/default.jpg"}
+              reviews={0}
             />
           ))}
         </div>
@@ -251,7 +275,7 @@ export default function Home() {
           <h2 className="text-xl font-semibold text-indigo-700 mb-4">Links</h2>
           <ul className="space-y-2">
             <li>
-              <Link to="/resources" className="text-indigo-600 hover:underline">
+              <Link to="/textbooks" className="text-indigo-600 hover:underline">
                 Resources by Grade
               </Link>
             </li>
@@ -260,14 +284,7 @@ export default function Home() {
                 Digital Learning Devices
               </Link>
             </li>
-            <li>
-              <Link
-                to="/shop-by-learning-area"
-                className="text-indigo-600 hover:underline"
-              >
-                Shop by Learning Area
-              </Link>
-            </li>
+
             <li>
               <Link to="/return" className="text-indigo-600 hover:underline">
                 Return Policy

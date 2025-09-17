@@ -25,6 +25,10 @@ export default [
   route("messages", "routes/admin/messages.jsx"),
   route("subscribes", "routes/admin/subscribers.jsx"),
   route("devices", "routes/category/devices.jsx"),
+  route("books", "routes/category/books.jsx"),
+  route("other", "routes/category/other.jsx"),
+  route("stationery", "routes/category/stationery.jsx"),
+  route("textbooks", "routes/category/textbooks.jsx"),
   route("return", "routes/return/return.jsx"),
   route("profile/:orderid/item/:itemid", "routes/profile/orderdetails.jsx"),
 ];

@@ -4,16 +4,24 @@ import { User, UserPen, ShoppingCart } from "lucide-react";
 
 export default function Navbar({ userId, userRole, cartItems }) {
   let location = useLocation();
-  let [isOpen, setIsOpen] = useState(false); // for mobile menu
+  let [isOpen, setIsOpen] = useState(false); // mobile menu
   let [showCategories, setShowCategories] = useState(false);
-  let [showPopover, setShowPopover] = useState(false); // for popover
-  let popoverRef = useRef(null);
+  let [showPopover, setShowPopover] = useState(false);
 
-  // Close popover when clicking outside
+  // Separate refs
+  let categoriesRef = useRef(null);
+  let userPopoverRef = useRef(null);
+
+  // Close popovers when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
-      if (popoverRef.current && !popoverRef.current.contains(e.target)) {
+      if (categoriesRef.current && !categoriesRef.current.contains(e.target)) {
         setShowCategories(false);
+      }
+      if (
+        userPopoverRef.current &&
+        !userPopoverRef.current.contains(e.target)
+      ) {
         setShowPopover(false);
       }
     }
@@ -31,13 +39,12 @@ export default function Navbar({ userId, userRole, cartItems }) {
             alt="Collins EduMart Logo"
             className="h-10 w-10 rounded-full"
           />
-
           <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 bg-clip-text text-transparent">
             Collins EduMart
           </span>
         </Link>
 
-        {/* Search Input */}
+        {/* Search Input (not for admin) */}
         {userRole !== "admin" && (
           <Form
             key={location.pathname}
@@ -53,14 +60,14 @@ export default function Navbar({ userId, userRole, cartItems }) {
             />
             <button
               type="submit"
-              className="text-gray-500 dark:text-gray-400 hidden md:block"
+              className="text-gray-500 dark:text-gray-400 hidden lg:block"
             >
               🔎
             </button>
           </Form>
         )}
 
-        {/* Navigation Links */}
+        {/* Desktop Nav Links */}
         <ul className="hidden md:flex items-center space-x-2 lg:space-x-6 text-sm font-medium text-gray-800 dark:text-gray-200">
           <li>
             <Link
@@ -97,7 +104,7 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 </Link>
               </li>
 
-              {/* Cart Icon with count */}
+              {/* Cart Icon */}
               <li className="relative">
                 <Link to="/cart" className="flex items-center">
                   <ShoppingCart />
@@ -109,11 +116,13 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 </Link>
               </li>
 
+              {/* Categories Dropdown */}
               <li>
-                {/* categories */}
-                <div className="hidden md:flex relative" ref={popoverRef}>
+                <div className="hidden md:flex relative" ref={categoriesRef}>
                   <button
                     onClick={() => setShowCategories(!showCategories)}
+                    aria-haspopup="true"
+                    aria-expanded={showCategories}
                     className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
                   >
                     Categories
@@ -121,38 +130,36 @@ export default function Navbar({ userId, userRole, cartItems }) {
 
                   {showCategories && (
                     <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 z-50">
-                      <>
-                        <Link
-                          to="/textbooks"
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          Textbooks
-                        </Link>
-                        <Link
-                          to="/devices"
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          Digital Devices
-                        </Link>
-                        <Link
-                          to="/stationery"
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          Stationery
-                        </Link>
-                        <Link
-                          to="/exercise"
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          Exercise Books
-                        </Link>
-                        <Link
-                          to="/others"
-                          className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          Others
-                        </Link>
-                      </>
+                      <Link
+                        to="/textbooks"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Textbooks
+                      </Link>
+                      <Link
+                        to="/devices"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Digital Devices
+                      </Link>
+                      <Link
+                        to="/stationery"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Stationery
+                      </Link>
+                      <Link
+                        to="/books"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Exercise Books
+                      </Link>
+                      <Link
+                        to="/other"
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
+                      >
+                        Others
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -162,9 +169,11 @@ export default function Navbar({ userId, userRole, cartItems }) {
         </ul>
 
         {/* User Popover */}
-        <div className="hidden md:flex relative" ref={popoverRef}>
+        <div className="hidden md:flex relative" ref={userPopoverRef}>
           <button
             onClick={() => setShowPopover(!showPopover)}
+            aria-haspopup="true"
+            aria-expanded={showPopover}
             className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
           >
             <User className="w-6 h-6 text-gray-700 dark:text-gray-200" />
@@ -176,13 +185,13 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 <>
                   <Link
                     to="/login"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Login
                   </Link>
                   <Link
                     to="/signup"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Sign Up
                   </Link>
@@ -192,12 +201,12 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 <>
                   <Link
                     to="/profile"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Profile
                   </Link>
                   <Form method="post" action="/logout">
-                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
                       Logout
                     </button>
                   </Form>
@@ -207,12 +216,12 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 <>
                   <Link
                     to="/"
-                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    className="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     Home
                   </Link>
                   <Form method="post" action="/logout">
-                    <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">
                       Logout
                     </button>
                   </Form>
@@ -265,10 +274,44 @@ export default function Navbar({ userId, userRole, cartItems }) {
                 Contact
               </Link>
 
+              {/* Mobile Categories */}
+              <div className="pl-2">
+                <p className="font-semibold mt-2">Categories</p>
+                <Link
+                  to="/textbooks"
+                  className="block px-2 py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Textbooks
+                </Link>
+                <Link
+                  to="/devices"
+                  className="block px-2 py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Digital Devices
+                </Link>
+                <Link
+                  to="/stationery"
+                  className="block px-2 py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Stationery
+                </Link>
+                <Link
+                  to="/books"
+                  className="block px-2 py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Exercise Books
+                </Link>
+                <Link
+                  to="/others"
+                  className="block px-2 py-1 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Others
+                </Link>
+              </div>
+
               {/* Cart inside mobile menu */}
               <div className="flex items-center space-x-1 hover:text-blue-600 dark:hover:text-blue-400">
                 <ShoppingCart />
-
                 <span className="ml-1 text-xs bg-red-500 text-white px-1 rounded-full">
                   {cartItems.length}
                 </span>
@@ -280,14 +323,12 @@ export default function Navbar({ userId, userRole, cartItems }) {
 
           {!userId && (
             <>
-              <li>
-                <Link
-                  to="/signup"
-                  className="text-gray-700 hover:text-blue-600 transition border-b-2 border-transparent hover:border-blue-600"
-                >
-                  Signup
-                </Link>
-              </li>
+              <Link
+                to="/signup"
+                className="block hover:text-blue-600 dark:hover:text-blue-400"
+              >
+                Signup
+              </Link>
             </>
           )}
           {!userId ? (

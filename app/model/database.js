@@ -24,17 +24,64 @@ export async function addItem(item) {
   });
 }
 
-export async function findDevices() {
-  let devices = await db
-    .collection("commerce")
-    .find({ category: "digital devices" })
-    .toArray();
+// export async function findDevices() {
+//   let devices = await db
+//     .collection("commerce")
+//     .find({ category: "digital devices" })
+//     .toArray();
 
-  return devices.map((item) => ({
-    ...item,
-    _id: item._id.toString(),
-  }));
-}
+//   return devices.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+// }
+
+// export async function findTextbooks() {
+//   let devices = await db
+//     .collection("commerce")
+//     .find({ category: "textbooks" })
+//     .toArray();
+
+//   return devices.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+// }
+
+// export async function findStationeries() {
+//   let devices = await db
+//     .collection("commerce")
+//     .find({ category: "stationery" })
+//     .toArray();
+
+//   return devices.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+// }
+// export async function findBooks() {
+//   let devices = await db
+//     .collection("commerce")
+//     .find({ category: "exercise books" })
+//     .toArray();
+
+//   return devices.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+// }
+
+// export async function findOther() {
+//   let devices = await db
+//     .collection("commerce")
+//     .find({ category: "other" })
+//     .toArray();
+
+//   return devices.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+// }
 
 export async function removeItem(id) {
   return collection.deleteOne({ _id: new ObjectId(id) });
@@ -46,6 +93,15 @@ export async function updateItem(id, updateData) {
 
 export async function getItemById(id) {
   return collection.findOne({ _id: new ObjectId(id) });
+}
+
+export async function getItemsByCategory(category) {
+  let items = await collection.find({ category }).toArray();
+
+  return items.map((item) => ({
+    ...item,
+    _id: item._id.toString(),
+  }));
 }
 
 export async function getProductCount() {
