@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 export default function Sidebar({ loaderData }) {
-  const items = [
+  let items = [
     {
       to: "/users",
       icon: <UsersRound className="w-6 h-6" />,
@@ -51,7 +51,7 @@ export default function Sidebar({ loaderData }) {
   return (
     <div
       className="flex flex-row md:flex-col gap-3 p-2 md:p-4 bg-white shadow-md
-                 fixed md:absolute bottom-0 w-full md:top-22 md:rounded-r-3xl md:left-0 md:h-full md:w-48 z-10 justify-around"
+                 fixed md:absolute bottom-0 w-full md:top-20 md:rounded-r-3xl md:left-0 md:h-full md:w-48 z-10 justify-around"
     >
       {items.map((item, index) => (
         <Link

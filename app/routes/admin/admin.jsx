@@ -11,7 +11,7 @@ import {
   getOrdersStats,
   getProductCount,
   getUserCount,
-  getMessageCount,
+  getUnreadMessages,
   countNewSubscribes,
   getUserById,
 } from "../../model/database";
@@ -44,7 +44,9 @@ export async function loader({ request }) {
   let newOrders = await getNewOrders();
   let latestsOrders = await getLatestOrders();
   let revenue = await getOrdersRevenue();
-  let messageCount = await getMessageCount();
+  // Fetch count of unread messages only
+  let unreadMessages = await getUnreadMessages();
+  let messageCount = unreadMessages.length;
   let newSubscribes = await countNewSubscribes();
   return data(
     {
