@@ -31,7 +31,7 @@ export default function Sidebar({ loaderData }) {
     {
       to: "/messages",
       icon: <MessageCircleMore className="w-6 h-6" />,
-      label: "Messages",
+      label: "New Messages",
       count: loaderData.messageCount,
     },
     {
